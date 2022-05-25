@@ -102,7 +102,7 @@ parseInt("09")
 
 ```javascript
 function test() {
-   console.log(a);
+   console.log(a); 
    console.log(foo());
 
    var a = 1;
@@ -111,7 +111,7 @@ function test() {
    }
 }
 
-test();
+test(); //undefined 2 undefined PREGUNTAR, creo que es por que foo esta como foo()
 ```
 
 Y el de este código? :
@@ -127,7 +127,7 @@ function getFood(food) {
     return snack;
 }
 
-getFood(false);
+getFood(false); // 'Meow Mix'
 ```
 
 
@@ -147,11 +147,11 @@ var obj = {
    }
 };
 
-console.log(obj.prop.getFullname());
+console.log(obj.prop.getFullname()); // aurelio de rosa
 
-var test = obj.prop.getFullname;
+var test = obj.prop.getFullname; //
 
-console.log(test());
+console.log(test());// juan perez
 ```
 
 ### Event loop
@@ -160,11 +160,11 @@ Considerando el siguiente código, ¿Cuál sería el orden en el que se muestra 
 
 ```javascript
 function printing() {
-   console.log(1);
-   setTimeout(function() { console.log(2); }, 1000);
-   setTimeout(function() { console.log(3); }, 0);
-   console.log(4);
+   console.log(1);//1ero
+   setTimeout(function() { console.log(2); }, 1000);//5to
+   setTimeout(function() { console.log(3); }, 0);//4to
+   console.log(4);//3
 }
 
-printing();
+printing();   
 ```
