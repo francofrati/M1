@@ -1,5 +1,9 @@
 "use strict";
 
+const { isPrematureTemplateContentError } = require("@11ty/eleventy/src/EleventyErrorUtil");
+const { parseArguments } = require("@11ty/eleventy/src/Engines/Liquid");
+const { SearchSource } = require("jest");
+
 /*
 Implementar la clase LinkedList, definiendo los siguientes métodos:
   - add: agrega un nuevo nodo al final de la lista;
@@ -11,9 +15,68 @@ Implementar la clase LinkedList, definiendo los siguientes métodos:
   En caso de que la búsqueda no arroje resultados, search debe retornar null.
 */
 
-function LinkedList() {}
+class Node {
+  constructor(valor) {
+    this.value = valor;
+    this.next = null;
+  }
+}
 
-function Node(value) {}
+
+class LinkedList {
+  constructor() {
+    this.head = null;
+  }
+
+  add(valor){
+    let nodo = new Node(valor);
+    let current = this.head;
+    if(!current){this.head = nodo}
+
+    else{while(current.next){
+      current = current.next
+    }
+    current.next = nodo
+  }
+  }
+
+  remove(){
+    let current = this.head;
+
+    if(!current){return null}
+    else if(!current.next){
+      var nodoRemovido = current.value;
+      this.head = null;
+      return nodoRemovido
+    }
+    else{
+      let Siguiente = this.head
+      while(Siguiente.next.next){
+        Siguiente = Siguiente.next 
+      }
+
+      var nodoRemovido = Siguiente.next.value;
+      Siguiente.next = null;
+      return nodoRemovido;      
+    }
+  }
+
+  search(param,cb){
+    let current = this.head;
+    
+    while(!(current === null)){
+
+      if(current.value=== param){//funciona hasta ahi, pero todavia no toma callbacks.
+        return current.value
+      }
+      else if(typeof param === 'function'){
+        if(param(current.value)){return current.value}
+      }
+      current = current.next
+    }
+    return null
+  }
+}
 
 /*
 Implementar la clase HashTable.
@@ -30,8 +93,35 @@ La clase debe tener los siguientes métodos:
 Ejemplo: supongamos que quiero guardar {instructora: 'Ani'} en la tabla. Primero puedo chequear, con hasKey, si ya hay algo en la tabla con el nombre 'instructora'; luego, invocando set('instructora', 'Ani'), se almacenará el par clave-valor en un bucket específico (determinado al hashear la clave)
 */
 
-function HashTable() {}
+function HashTable() {
+  this.numBuckets = 35
+  this.buckets = [this.numBuckets];
+}
 
+HashTable.prototype.hash = function(key){
+  var suma = 0;
+  for(let i = 0 ; i < key.length ; i++){
+    suma = suma + key.charCodeAt(i)
+  }
+  return suma % this.numBuckets;
+}
+HashTable.prototype.set = function(key,value){
+
+  var pos = this.hash(key)
+  if(!this.buckets[pos]){
+    this.buckets[pos]={}
+  }
+  this.buckets[pos][key] = value 
+}
+HashTable.prototype.get = function(key){
+  var pos = this.hash(key)
+  return this.buckets[pos][key]
+}
+HashTable.prototype.hasKey = function(key){
+  var pos = this.hash(key)
+  if(this.buckets[pos].hasOwnProperty(key)){return true}
+  return false
+}
 // No modifiquen nada debajo de esta linea
 // --------------------------------
 
